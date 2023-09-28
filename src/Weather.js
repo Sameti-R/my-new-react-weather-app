@@ -90,13 +90,15 @@ export default function Weather() {
           <a
             className="myLink"
             href="https://github.com/Sameti-R/my-new-react-weather-app"
+            target="_blank"
           >
             GitHub
           </a>
           <span className="footage">, Hosted on:</span>
           <a
             className="myLink"
-            href="https:https://exquisite-sunburst-9df367.netlify.app/"
+            href="https://exquisite-sunburst-9df367.netlify.app/"
+            target="_blank"
           >
             Netlify
           </a>
