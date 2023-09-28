@@ -94,7 +94,10 @@ export default function Weather() {
             GitHub
           </a>
           <span className="footage">, Hosted on:</span>
-          <a className="myLink" href="https://darling-pony-e2bc6a.netlify.app/">
+          <a
+            className="myLink"
+            href="https://https://exquisite-sunburst-9df367.netlify.app//"
+          >
             Netlify
           </a>
         </span>
