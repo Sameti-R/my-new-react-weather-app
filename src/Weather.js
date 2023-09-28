@@ -96,7 +96,7 @@ export default function Weather() {
           <span className="footage">, Hosted on:</span>
           <a
             className="myLink"
-            href="https://https://exquisite-sunburst-9df367.netlify.app//"
+            href="https:https://exquisite-sunburst-9df367.netlify.app/"
           >
             Netlify
           </a>
