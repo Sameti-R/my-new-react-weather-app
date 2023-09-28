@@ -89,7 +89,7 @@ export default function Weather() {
           <span className="footage">Open Sourced on: </span>
           <a
             className="myLink"
-            href="https://github.com/Sameti-R/WeatherApp-FinalProject"
+            href="https://github.com/Sameti-R/my-new-react-weather-app"
           >
             GitHub
           </a>
