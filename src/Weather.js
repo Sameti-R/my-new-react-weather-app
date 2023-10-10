@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
+
+import "./App.css";
 export default function Weather() {
   let [list, setList] = useState(
     <div>
@@ -17,13 +19,7 @@ export default function Weather() {
           />{" "}
           <span className="temperature">
             <span className="degree">12</span>
-            <a href="#" className="symbol active">
-              ℃
-            </a>{" "}
-            <span className="degree">|</span> <span className="degree"> </span>
-            <a href="#" className="symbol">
-              ℉
-            </a>{" "}
+            <span className="symbol active">°</span>
           </span>
         </p>
         <p className="col">
@@ -35,7 +31,7 @@ export default function Weather() {
             <br />
             <span>
               <span className="text"> Wind:</span> <span> 10 </span>
-              <span>km</span>{" "}
+              <span>km/h</span>{" "}
             </span>
           </span>
         </p>
@@ -52,8 +48,48 @@ export default function Weather() {
     </div>
   );
   let [city, setCity] = useState("");
+  let [metric, setMetric] = useState(
+    <a href="#" className="symbol active">
+      ℃
+    </a>
+  );
+  let [imperial, setImperial] = useState(
+    <a href="#" className="symbol">
+      ℉
+    </a>
+  );
   function ShowWeather(response) {
+    setMetric(
+      <a href="#" className="symbol active ">
+        ℃
+      </a>
+    );
+    setImperial(
+      <a href="#" className="symbol ">
+        ℉
+      </a>
+    );
     let icon = `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`;
+    let days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    let date = new Date(response.data.dt * 1000);
+    let day = days[date.getDay()];
+    let hour = date.getHours();
+    if (hour < 10) {
+      hour = `0${hour}`;
+    }
+    let minute = date.getMinutes();
+    if (minute < 10) {
+      minute = `0${minute}`;
+    }
+
     setList(
       <div>
         <div className="row text-center">
@@ -70,14 +106,7 @@ export default function Weather() {
               <span className="degree">
                 {Math.round(response.data.main.temp)}{" "}
               </span>
-              <a href="#" className="symbol active">
-                ℃
-              </a>{" "}
-              <span className="degree">|</span>{" "}
-              <span className="degree"> </span>
-              <a href="#" className="symbol">
-                ℉
-              </a>{" "}
+              <span className="symbol active">°</span>
             </span>
           </p>
           <p className="col">
@@ -99,12 +128,93 @@ export default function Weather() {
 
         <div className="fiveDays" id="forecast"></div>
         <div className="dayTime">
-          <span className="text"> Last updated:</span>
-          <span className="day">Saturday</span>,{" "}
+          <span className="text"> Last updated: </span>
+          <span className="day"> {day} </span>,{" "}
           <span className="time">
-            <span>22</span>:<span>45</span>{" "}
+            <span> {hour}</span>:<span>{minute} </span>{" "}
           </span>
         </div>
+        <div></div>
+      </div>
+    );
+  }
+  function ShowWeatherTwo(response) {
+    setMetric(
+      <a href="#" className="symbol ">
+        ℃
+      </a>
+    );
+    setImperial(
+      <a href="#" className="symbol active">
+        ℉
+      </a>
+    );
+    let icon = `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`;
+    let days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    let date = new Date(response.data.dt * 1000);
+    let day = days[date.getDay()];
+    let hour = date.getHours();
+    if (hour < 10) {
+      hour = `0${hour}`;
+    }
+    let minute = date.getMinutes();
+    if (minute < 10) {
+      minute = `0${minute}`;
+    }
+
+    setList(
+      <div>
+        <div className="row text-center">
+          <p className="col">
+            <span className="city">{response.data.name}</span> <br />{" "}
+            <span className="weather">
+              {response.data.weather[0].description}
+            </span>
+          </p>
+          <p className="col">
+            {" "}
+            <img src={icon} alt="weather condition" />{" "}
+            <span className="temperature">
+              <span className="degree">
+                {Math.round(response.data.main.temp)}{" "}
+              </span>
+              <span className="symbol active">°</span>
+            </span>
+          </p>
+          <p className="col">
+            <br />{" "}
+            <span className="details">
+              <span>
+                <span className="text"> Humidty:</span>{" "}
+                <span> {response.data.main.humidity}</span>%
+              </span>{" "}
+              <br />
+              <span>
+                <span className="text"> Wind:</span>{" "}
+                <span> {Math.round(response.data.wind.speed)} </span>
+                <span>mph</span>{" "}
+              </span>
+            </span>
+          </p>
+        </div>
+
+        <div className="fiveDays" id="forecast"></div>
+        <div className="dayTime">
+          <span className="text"> Last updated: </span>
+          <span className="day"> {day} </span>,{" "}
+          <span className="time">
+            <span> {hour}</span>:<span>{minute} </span>{" "}
+          </span>
+        </div>
+        <div></div>
       </div>
     );
   }
@@ -116,7 +226,11 @@ export default function Weather() {
   function UpdateCity(event) {
     setCity(event.target.value);
   }
-
+  function ChangeUnitImperial(event) {
+    event.preventDefault();
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=3a94f3778290bfeee61278505dbbe51d&units=imperial`;
+    axios.get(url).then(ShowWeatherTwo);
+  }
   return (
     <div>
       {" "}
@@ -128,12 +242,22 @@ export default function Weather() {
                 type="search"
                 className="searchEngine"
                 placeholder="Enter a city"
-                autofocus="on"
-                autocomplete="off"
+                autoFocus="on"
+                autoComplete="off"
                 onChange={UpdateCity}
               />
               <input type="submit" className="searchButton" value="Search" />
             </form>
+            <span>
+              <a href="#" className="symbol  active" onClick={currentWeather}>
+                {metric}
+              </a>{" "}
+              <span className="degree">|</span>{" "}
+              <span className="degree"> </span>
+              <a href="#" className="symbol " onClick={ChangeUnitImperial}>
+                {imperial}
+              </a>{" "}
+            </span>
             <div>{list}</div>
           </div>
           <div>
